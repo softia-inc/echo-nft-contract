@@ -10,7 +10,7 @@ jobs:
     name: Setup
     runs-on: ubuntu-latest
     env:
-      PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+      ACTIONS_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -30,4 +30,4 @@ jobs:
         run: make build
       - run: yarn publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_ACCESS_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
