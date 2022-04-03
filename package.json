@@ -1,22 +1,14 @@
 {
   "name": "@softia-inc/echo-nft-contract",
   "version": "0.0.0",
-  "description": "",
   "repository": {
     "type": "git",
     "url": "https://github.com/softia-inc/echo-nft-contract"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/softia-inc/echo-nft-contract/issues"
   },
   "publishConfig": {
     "access": "restricted",
     "registry": "https://npm.pkg.github.com/"
   },
-  "homepage": "https://github.com/softia-inc/echo-nft-contract#readme",
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.5",
     "@nomiclabs/hardhat-waffle": "^2.0.3",
