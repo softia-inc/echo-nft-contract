@@ -1,0 +1,33 @@
+name: npm publish master
+on:
+  push:
+    # branches:
+    #   - 'master'
+    # tags:
+    #   - '*'
+jobs:
+  release:
+    name: Setup
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: setup
+        uses: actions/setup-node@v2
+        with:
+          node-version: 12
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@softia-inc'
+      - run: yarn
+      - run: chmod u+x version-up.sh
+      - name: replace version
+        run: export v=$(git describe --tags) && ./version-up.sh
+      - name: generate
+        run: make build
+      - run: yarn publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
