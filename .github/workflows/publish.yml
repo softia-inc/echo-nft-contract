@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
+      PRIVATE_KEY: ${{ secret.PRIVATE_KEY }}
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -26,7 +27,7 @@ jobs:
       - run: chmod u+x version-up.sh
       - name: replace version
         run: export v=$(git describe --tags) && ./version-up.sh
-      - name: generate
+      - name: build
         run: make build
       - run: yarn publish
         env:

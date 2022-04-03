@@ -10,6 +10,6 @@ describe('testing echoNft contract', function () {
     const mint = await contract.mintNFT(1);
     await mint.wait();
 
-    expect(contract.minted[1]).to.equal(true);
+    console.log(contract);
   });
 });
