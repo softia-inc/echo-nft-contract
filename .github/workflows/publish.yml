@@ -1,10 +1,8 @@
-name: npm publish master
+name: npm publish
 on:
   push:
-    # branches:
-    #   - 'master'
-    # tags:
-    #   - '*'
+    branches-ignore:
+      - 'master'
 jobs:
   release:
     name: Setup
@@ -27,8 +25,11 @@ jobs:
       - run: chmod u+x version-up.sh
       - name: replace version
         run: export v=$(git describe --tags) && ./version-up.sh
-      - name: build
+      - name: generate
         run: make build
-      - run: yarn publish
+      - name: publish
+        run: |
+          TAG=$(echo ${{ github.ref }} | sed -e "s#refs/heads/##g")
+          yarn publish --tag ${TAG}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
