@@ -10,7 +10,7 @@ jobs:
     name: Setup
     runs-on: ubuntu-latest
     env:
-      ACTIONS_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
     steps:
       - name: checkout
         uses: actions/checkout@v2
