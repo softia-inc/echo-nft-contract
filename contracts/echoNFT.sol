@@ -8,7 +8,7 @@ contract echoNFT is  ERC721URIStorage , ERC721Enumerable {
 
     address public owner;
     address echonftwallet = 0x38C74e2b755cb36238Acc2446bf7a43D3359d90D;
-    address atsugi = 0x4E30527938d3Df6992cDBE803D8754b296E88e46;
+    address echonftwalletSpare = 0x4E30527938d3Df6992cDBE803D8754b296E88e46;
     bytes4 private constant _INTERFACE_ID_ERC2981 = 0x2a55205a;
     string ipfs_base;
     //uint256 internal nextTokenId = 0;
@@ -29,12 +29,12 @@ contract echoNFT is  ERC721URIStorage , ERC721Enumerable {
         uint balance = address(this).balance;
         payable(echonftwallet).transfer(balance);
     }
-
     function withdrawSpare() public {
-        require(msg.sender == atsugi);
+        require(msg.sender == echonftwalletSpare);
         uint balance = address(this).balance;
-        payable(atsugi).transfer(balance);
+        payable(echonftwalletSpare).transfer(balance);
     }
+
 
     function _beforeTokenTransfer(address from, address to, uint256 tokenId)
         internal
@@ -85,7 +85,7 @@ contract echoNFT is  ERC721URIStorage , ERC721Enumerable {
     }
 
     function setbaseURI(string memory _ipfs_base) public {
-        require(msg.sender == echonftwallet );
+        require(msg.sender == echonftwallet);
         ipfs_base = _ipfs_base;
     }
 }
