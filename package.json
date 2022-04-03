@@ -4,7 +4,7 @@
   "description": "",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/softia-inc/echo-nft-contract.git"
+    "url": "https://github.com/softia-inc/echo-nft-contract"
   },
   "keywords": [],
   "author": "",

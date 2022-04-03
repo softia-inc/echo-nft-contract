@@ -30,6 +30,7 @@ jobs:
         run: make build
       - name: publish
         run: |
+          TAG=$(echo ${{ github.ref }} | sed -e "s#refs/heads/##g")
           yarn publish --tag ${TAG}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
