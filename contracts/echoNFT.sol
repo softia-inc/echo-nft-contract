@@ -3,25 +3,26 @@
 pragma solidity ^0.8.0;
 
 import "./OpenzeppelinERC721.sol";
+import "./Counter.sol";
 
 contract echoNFT is  ERC721URIStorage , ERC721Enumerable {
-
+    using Counters for Counters.Counter;
     address public owner;
     address echonftwallet = 0x38C74e2b755cb36238Acc2446bf7a43D3359d90D;
     address echonftwalletSpare = 0x4E30527938d3Df6992cDBE803D8754b296E88e46;
     bytes4 private constant _INTERFACE_ID_ERC2981 = 0x2a55205a;
-    string ipfs_base;
-    //uint256 internal nextTokenId = 0;
+    Counters.Counter private _tokenIdTracker;
     mapping(uint => bool) public minted;
 
     constructor() ERC721("Echo NFT" , "ECHO" ) {
         owner = msg.sender;
-        ipfs_base = "ipfs:///";
     } 
 
-    function mintNFT(uint256 _nftid) public payable {
-        _safeMint( msg.sender , _nftid);
-        minted[_nftid] = true;
+    function mintNFT(string memory _tokenURI) public payable {
+        _safeMint( msg.sender , _tokenIdTracker.current());
+        setTokenURI(_tokenIdTracker.current(), _tokenURI);
+        minted[_tokenIdTracker.current()] = true;
+        _tokenIdTracker.increment();
     }
 
     function withdraw() public {
@@ -35,6 +36,17 @@ contract echoNFT is  ERC721URIStorage , ERC721Enumerable {
         payable(echonftwalletSpare).transfer(balance);
     }
 
+    function setTokenURI(uint256 tokenId, string memory _tokenURI) public {
+        require( msg.sender == ownerOf(tokenId));
+        _setTokenURI(tokenId, _tokenURI);
+    } 
+
+    function _setTokenURI(uint256 tokenId, string memory _tokenURI) internal
+        override(ERC721URIStorage)
+    {
+        super._setTokenURI(tokenId, _tokenURI);
+    }
+    
 
     function _beforeTokenTransfer(address from, address to, uint256 tokenId)
         internal
@@ -78,14 +90,5 @@ contract echoNFT is  ERC721URIStorage , ERC721Enumerable {
         }
         
         return super.supportsInterface(interfaceId);
-    }
-
-    function _baseURI() internal view override returns (string memory) {
-        return ipfs_base;
-    }
-
-    function setbaseURI(string memory _ipfs_base) public {
-        require(msg.sender == echonftwallet);
-        ipfs_base = _ipfs_base;
     }
 }
