@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
+      PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
     steps:
       - name: checkout
         uses: actions/checkout@v2
