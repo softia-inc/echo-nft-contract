@@ -5,6 +5,8 @@ jobs:
   release:
     name: ci
     runs-on: ubuntu-latest
+    env:
+      PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
     steps:
       - name: checkout
         uses: actions/checkout@v2
