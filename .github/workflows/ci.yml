@@ -1,0 +1,18 @@
+name: ci
+on:
+  push:
+jobs:
+  release:
+    name: ci
+    runs-on: ubuntu-latest
+    env:
+      PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: init
+        run: make init
+      - name: test
+        run: make testing
+      - name: build
+        run: make build
