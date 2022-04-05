@@ -18,11 +18,12 @@ contract echoNFT is  ERC721URIStorage , ERC721Enumerable {
         owner = msg.sender;
     } 
 
-    function mintNFT(string memory _tokenURI) public payable {
+    function mintNFT(string memory _tokenURI) public payable returns (uint256) {
         _safeMint( msg.sender , _tokenIdTracker.current());
         setTokenURI(_tokenIdTracker.current(), _tokenURI);
         minted[_tokenIdTracker.current()] = true;
         _tokenIdTracker.increment();
+        return _tokenIdTracker.current();
     }
 
     function withdraw() public {
