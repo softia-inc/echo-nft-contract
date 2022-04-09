@@ -11,7 +11,7 @@ contract echoNFT is  ERC721URIStorage , ERC721Enumerable {
     address echonftwallet = 0x38C74e2b755cb36238Acc2446bf7a43D3359d90D;
     address echonftwalletSpare = 0x4E30527938d3Df6992cDBE803D8754b296E88e46;
     bytes4 private constant _INTERFACE_ID_ERC2981 = 0x2a55205a;
-    Counters.Counter private _tokenIdTracker;
+    Counters.Counter private _tokenIdCounter;
     mapping(uint => bool) public minted;
 
     constructor() ERC721("Echo NFT" , "ECHO" ) {
@@ -19,10 +19,10 @@ contract echoNFT is  ERC721URIStorage , ERC721Enumerable {
     } 
 
     function mintNFT(string memory _tokenURI) public payable {
-        _safeMint( msg.sender , _tokenIdTracker.current());
-        setTokenURI(_tokenIdTracker.current(), _tokenURI);
-        minted[_tokenIdTracker.current()] = true;
-        _tokenIdTracker.increment();
+            _tokenIdCounter.increment();
+            _safeMint( msg.sender , _tokenIdCounter.current());
+            setTokenURI(_tokenIdCounter.current(), _tokenURI);
+            minted[_tokenIdCounter.current()] = true;
     }
 
     function withdraw() public {
@@ -75,7 +75,6 @@ contract echoNFT is  ERC721URIStorage , ERC721Enumerable {
 
     function royaltyInfo(uint256 _tokenId, uint256 _salePrice) public view returns (address receiver, uint256 royaltyAmount) {
             _tokenId;
-            //----------------------------------------
             return (echonftwallet, (_salePrice * 1000)/10000);
     }
 
@@ -97,6 +96,19 @@ contract echoNFT is  ERC721URIStorage , ERC721Enumerable {
         view
         returns (uint256)
     {
-        return _tokenIdTracker.current();
+        return _tokenIdCounter.current();
+    }
+
+    function getExsitTokenId(uint256 tokenId)
+        public
+        view
+        returns (bool)
+    {
+        return minted[tokenId];
+    }
+
+    function incrementTokenId() public {
+        require(msg.sender == echonftwallet);
+        _tokenIdCounter.increment();
     }
 }
