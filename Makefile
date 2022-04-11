@@ -1,7 +1,10 @@
 init:
 	npm install
+	cp .env.example .env
+node:
+	npx hardhat node
 testing:
-	npx hardhat test --network matic
+	npx hardhat test --network localhost
 build:
 	npx hardhat compile
 deploy-test:

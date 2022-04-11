@@ -8,3 +8,16 @@
 ## env
 
 - PRIVATE_KEY: string
+
+## localでのテスト方法
+
+1. localでnodeを立てる
+```
+make node
+```
+
+2. localのnodeでtestを実行する
+
+```
+make testing
+```
