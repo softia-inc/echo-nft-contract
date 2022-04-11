@@ -1,6 +1,5 @@
 init:
 	npm install
-	cp .env.example .env
 node:
 	npx hardhat node
 testing:
