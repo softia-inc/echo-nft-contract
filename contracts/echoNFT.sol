@@ -7,35 +7,18 @@ import "./Counter.sol";
 
 contract echoNFT is ERC721URIStorage, ERC721Enumerable {
     using Counters for Counters.Counter;
-    address public owner;
-    address echonftwallet = 0x38C74e2b755cb36238Acc2446bf7a43D3359d90D;
-    address echonftwalletSpare = 0x4E30527938d3Df6992cDBE803D8754b296E88e46;
     bytes4 private constant _INTERFACE_ID_ERC2981 = 0x2a55205a;
     Counters.Counter private _tokenIdCounter;
     mapping(uint256 => bool) public minted;
 
-    constructor() ERC721("Echo NFT", "ECHO") {
-        owner = msg.sender;
-    }
+    constructor() ERC721("Echo NFT", "ECHO") {}
 
-    function mintNFT(uint256 tokenId, string memory _tokenURI) public payable {
+    function mint(uint256 tokenId, string memory _tokenURI) public payable {
         require(tokenId == _tokenIdCounter.current());
         _tokenIdCounter.increment();
         _safeMint(msg.sender, tokenId);
         _setTokenURI(tokenId, _tokenURI);
         minted[tokenId] = true;
-    }
-
-    function withdraw() public {
-        require(msg.sender == echonftwallet);
-        uint256 balance = address(this).balance;
-        payable(echonftwallet).transfer(balance);
-    }
-
-    function withdrawSpare() public {
-        require(msg.sender == echonftwalletSpare);
-        uint256 balance = address(this).balance;
-        payable(echonftwalletSpare).transfer(balance);
     }
 
     function _setTokenURI(uint256 tokenId, string memory _tokenURI)
@@ -53,9 +36,10 @@ contract echoNFT is ERC721URIStorage, ERC721Enumerable {
         super._beforeTokenTransfer(from, to, tokenId);
     }
 
-    function burn(uint256 _id) public {
-        require(msg.sender == ownerOf(_id));
-        _burn(_id);
+    function burn(uint256 tokenId) public {
+        require(msg.sender == ownerOf(tokenId));
+        _burn(tokenId);
+        minted[tokenId] = false;
     }
 
     function _burn(uint256 tokenId)
@@ -72,15 +56,6 @@ contract echoNFT is ERC721URIStorage, ERC721Enumerable {
         returns (string memory)
     {
         return super.tokenURI(tokenId);
-    }
-
-    function royaltyInfo(uint256 _tokenId, uint256 _salePrice)
-        public
-        view
-        returns (address receiver, uint256 royaltyAmount)
-    {
-        _tokenId;
-        return (echonftwallet, (_salePrice * 1000) / 10000);
     }
 
     function supportsInterface(bytes4 interfaceId)
@@ -102,10 +77,5 @@ contract echoNFT is ERC721URIStorage, ERC721Enumerable {
 
     function isExistToken(uint256 tokenId) public view returns (bool) {
         return minted[tokenId];
-    }
-
-    function incrementTokenId() public {
-        require(msg.sender == echonftwallet);
-        _tokenIdCounter.increment();
     }
 }
