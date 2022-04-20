@@ -2,8 +2,9 @@
 
 pragma solidity ^0.8.0;
 
-import "./OpenzeppelinERC721.sol";
-import "./Counter.sol";
+import "./openzeppelin/extensions/ERC721URIStorage.sol";
+import "./openzeppelin/extensions/ERC721Enumerable.sol";
+import "./utils/Counters.sol";
 
 contract echoNFT is ERC721URIStorage, ERC721Enumerable {
     using Counters for Counters.Counter;
@@ -11,7 +12,9 @@ contract echoNFT is ERC721URIStorage, ERC721Enumerable {
     Counters.Counter private _tokenIdCounter;
     mapping(uint256 => bool) public minted;
 
-    constructor() ERC721("Echo NFT", "ECHO") {}
+    constructor() ERC721("Echo NFT", "ECHO") {
+        _tokenIdCounter.increment();
+    }
 
     function mint(uint256 tokenId, string memory _tokenURI) public payable {
         require(tokenId == _tokenIdCounter.current());
