@@ -7,4 +7,4 @@ testing:
 build:
 	npx hardhat compile
 deploy-test:
-	npx hardhat run scripts/deploy.js --network matic
+	npx hardhat run scripts/deploy.js --network ropsten
