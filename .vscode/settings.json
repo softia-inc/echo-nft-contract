@@ -9,4 +9,5 @@
     "**/.DS_Store": true,
     "__debug_bin": true
   },
+  "nuxt.isNuxtApp": false,
 }

@@ -1,12 +1,12 @@
 const { ethers, upgrades } = require("hardhat");
 
 async function main() {
-  // deploy
+  const address = "0xe457e0dea4aa752f154F55d3b80070Ffdcc6b0b6";
+  // upgrade
   const nft = await ethers.getContractFactory("echoNFT");
-  const instance = await upgrades.deployProxy(nft);
-  await instance.deployed();
+  const upgraded = await upgrades.upgradeProxy(address, nft);
 
-  console.log("echoNFT deployed to:", instance.address);
+  console.log("upgraded:", upgraded);
 }
 main()
   .then(() => process.exit(0))
