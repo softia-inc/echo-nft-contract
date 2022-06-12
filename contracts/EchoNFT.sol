@@ -2,18 +2,17 @@
 
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721URIStorageUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721EnumerableUpgradeable.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "./utils/Counters.sol";
 
-contract echoNFT is ERC721URIStorageUpgradeable, ERC721EnumerableUpgradeable {
+contract echoNFT is ERC721URIStorage, ERC721Enumerable {
     using Counters for Counters.Counter;
     bytes4 private constant _INTERFACE_ID_ERC2981 = 0x2a55205a;
     Counters.Counter private _tokenIdCounter;
     mapping(uint256 => bool) public minted;
 
-    function initialize() public initializer {
-        __ERC721_init("Echo NFT", "ECHO");
+    constructor() ERC721("Echo NFT", "ECHO") {
         _tokenIdCounter.increment();
     }
 
@@ -27,7 +26,7 @@ contract echoNFT is ERC721URIStorageUpgradeable, ERC721EnumerableUpgradeable {
 
     function _setTokenURI(uint256 tokenId, string memory _tokenURI)
         internal
-        override(ERC721URIStorageUpgradeable)
+        override(ERC721URIStorage)
     {
         super._setTokenURI(tokenId, _tokenURI);
     }
@@ -36,7 +35,7 @@ contract echoNFT is ERC721URIStorageUpgradeable, ERC721EnumerableUpgradeable {
         address from,
         address to,
         uint256 tokenId
-    ) internal override(ERC721Upgradeable, ERC721EnumerableUpgradeable) {
+    ) internal override(ERC721, ERC721Enumerable) {
         super._beforeTokenTransfer(from, to, tokenId);
     }
 
@@ -48,7 +47,7 @@ contract echoNFT is ERC721URIStorageUpgradeable, ERC721EnumerableUpgradeable {
 
     function _burn(uint256 tokenId)
         internal
-        override(ERC721Upgradeable, ERC721URIStorageUpgradeable)
+        override(ERC721, ERC721URIStorage)
     {
         super._burn(tokenId);
     }
@@ -56,7 +55,7 @@ contract echoNFT is ERC721URIStorageUpgradeable, ERC721EnumerableUpgradeable {
     function tokenURI(uint256 tokenId)
         public
         view
-        override(ERC721Upgradeable, ERC721URIStorageUpgradeable)
+        override(ERC721, ERC721URIStorage)
         returns (string memory)
     {
         return super.tokenURI(tokenId);
@@ -65,7 +64,7 @@ contract echoNFT is ERC721URIStorageUpgradeable, ERC721EnumerableUpgradeable {
     function supportsInterface(bytes4 interfaceId)
         public
         view
-        override(ERC721Upgradeable, ERC721EnumerableUpgradeable)
+        override(ERC721, ERC721Enumerable)
         returns (bool)
     {
         if (interfaceId == _INTERFACE_ID_ERC2981) {

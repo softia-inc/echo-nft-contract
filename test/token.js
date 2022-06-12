@@ -1,5 +1,5 @@
 const { expect } = require("chai");
-const { ethers, upgrades } = require("hardhat");
+const { ethers } = require("hardhat");
 
 describe("token testing", function () {
   let contractFactory;
@@ -8,8 +8,7 @@ describe("token testing", function () {
   beforeEach(async function () {
     contractFactory = await ethers.getContractFactory("echoNFT");
     [owner, user1, user2, user3] = await ethers.getSigners();
-    const instance = await upgrades.deployProxy(contractFactory);
-    contract = await instance.deployed();
+    contract = await contractFactory.deploy();
 
     // MEMO: contract basic info
     expect(await contract.name()).to.equal("Echo NFT");
@@ -157,37 +156,5 @@ describe("token testing", function () {
     expect(await contract.isExistToken(latestTokenId)).to.equal(true);
     expect(await contract.balanceOf(owner.address)).to.equal(1);
     expect(await contract.ownerOf(latestTokenId)).to.equal(owner.address);
-
-    // upgrade contract
-    contractFactory = await ethers.getContractFactory("echoNFT");
-    const contractV2 = await upgrades.upgradeProxy(
-      contract.address,
-      contractFactory
-    );
-
-    // MEMO: contract basic info
-    expect(await contractV2.name()).to.equal("Echo NFT");
-    expect(await contractV2.symbol()).to.equal("ECHO");
-    expect(await contractV2.totalSupply()).to.equal(1);
-    expect(await contractV2.balanceOf(owner.address)).to.equal(1);
-
-    // MEMO: mint
-    const latestTokenId2 = await contractV2.getCurrentTokenId();
-    expect(await contractV2.isExistToken(latestTokenId2)).to.equal(false);
-
-    // MEMO: mint token
-    const mintTx2 = await contractV2
-      .connect(owner)
-      .mint(latestTokenId2, "test TokenURI v2");
-    await mintTx2.wait();
-
-    // MEMO: token info
-    expect(await contractV2.tokenURI(latestTokenId2)).to.equal(
-      "test TokenURI v2"
-    );
-    expect(await contractV2.totalSupply()).to.equal(2);
-    expect(await contractV2.isExistToken(latestTokenId2)).to.equal(true);
-    expect(await contractV2.balanceOf(owner.address)).to.equal(2);
-    expect(await contractV2.ownerOf(latestTokenId2)).to.equal(owner.address);
   });
 });
