@@ -4,7 +4,7 @@ module.exports = {
   solidity: "0.8.4",
   networks: {
     ropsten: {
-      url: "https://ropsten.infura.io/v3/f3817857cc6e4679907a60270c5d1763",
+      url: "https://ropsten.infura.io/v3/5dab9b9ec92245a3b7bb2e3138277c5b",
       accounts: [process.env.PRIVATE_KEY],
     },
     rinkeby: {
