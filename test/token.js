@@ -140,7 +140,7 @@ describe("token testing", function () {
     expect(await contract.totalSupply()).to.equal(1);
   });
 
-  it("success mint", async function () {
+  it("set token uri test", async function () {
     const latestTokenId = await contract.getCurrentTokenId();
     expect(await contract.isExistToken(latestTokenId)).to.equal(false);
 
@@ -152,6 +152,30 @@ describe("token testing", function () {
 
     // MEMO: token info
     expect(await contract.tokenURI(latestTokenId)).to.equal("test TokenURI");
+    expect(await contract.totalSupply()).to.equal(1);
+    expect(await contract.isExistToken(latestTokenId)).to.equal(true);
+    expect(await contract.balanceOf(owner.address)).to.equal(1);
+    expect(await contract.ownerOf(latestTokenId)).to.equal(owner.address);
+
+    // MEMO: mint token
+    const mintTx2 = await contract
+      .connect(owner)
+      .setTokenURI(latestTokenId, "test TokenURI2");
+    await mintTx2.wait();
+    // MEMO: token info
+    expect(await contract.tokenURI(latestTokenId)).to.equal("test TokenURI2");
+    expect(await contract.totalSupply()).to.equal(1);
+    expect(await contract.isExistToken(latestTokenId)).to.equal(true);
+    expect(await contract.balanceOf(owner.address)).to.equal(1);
+    expect(await contract.ownerOf(latestTokenId)).to.equal(owner.address);
+
+    await expect(
+      contract
+        .connect(user1.address)
+        .setTokenURI(latestTokenId, "test TokenURI3")
+    ).to.be.reverted;
+    // MEMO: token info
+    expect(await contract.tokenURI(latestTokenId)).to.equal("test TokenURI2");
     expect(await contract.totalSupply()).to.equal(1);
     expect(await contract.isExistToken(latestTokenId)).to.equal(true);
     expect(await contract.balanceOf(owner.address)).to.equal(1);

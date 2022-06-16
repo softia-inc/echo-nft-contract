@@ -24,6 +24,14 @@ contract echoNFT is ERC721URIStorage, ERC721Enumerable {
         minted[tokenId] = true;
     }
 
+    function setTokenURI(uint256 tokenId, string memory _tokenURI)
+        public
+        payable
+    {
+        require(msg.sender == ownerOf(tokenId));
+        _setTokenURI(tokenId, _tokenURI);
+    }
+
     function _setTokenURI(uint256 tokenId, string memory _tokenURI)
         internal
         override(ERC721URIStorage)
