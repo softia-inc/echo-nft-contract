@@ -2,6 +2,10 @@ require("@nomiclabs/hardhat-waffle");
 module.exports = {
   solidity: "0.8.4",
   networks: {
+    mumbai: {
+      url: "https://rpc-mumbai.maticvigil.com/",
+      accounts: [process.env.PRIVATE_KEY],
+    },
     ropsten: {
       url: "https://ropsten.infura.io/v3/5dab9b9ec92245a3b7bb2e3138277c5b",
       accounts: [process.env.PRIVATE_KEY],
