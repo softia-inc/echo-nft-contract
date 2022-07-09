@@ -29,7 +29,7 @@ contract echoNFT is ERC721URIStorage, ERC721Enumerable {
 
     function bulkMint( uint256 numberOfToken, uint256 tokenId, string memory _tokenURI) public payable {
         require(tokenId == _tokenIdCounter.current());
-        require(numberOfToken <= 1000);
+        require(numberOfToken <= 100);
         for (uint i = 0 ; i < numberOfToken ; i++ ) {
             uint256 id = tokenId + i;
             mint(id, _tokenURI);
