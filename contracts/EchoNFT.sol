@@ -11,6 +11,7 @@ contract echoNFT is ERC721URIStorage, ERC721Enumerable {
     bytes4 private constant _INTERFACE_ID_ERC2981 = 0x2a55205a;
     Counters.Counter private _tokenIdCounter;
     mapping(uint256 => bool) public minted;
+    // key is token id, value is community owner address.
     mapping(uint256 => address) public communityOwner;
 
     constructor() ERC721("Echo NFT", "ECHO") {
@@ -32,7 +33,6 @@ contract echoNFT is ERC721URIStorage, ERC721Enumerable {
         for (uint i = 0 ; i < numberOfToken ; i++ ) {
             uint256 id = tokenId + i;
             mint(id, _tokenURI);
-            require(minted[id]);
         }
     }
 
