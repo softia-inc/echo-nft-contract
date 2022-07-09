@@ -63,13 +63,13 @@ describe("token testing", function () {
     const firstTokenId = await contract.getCurrentTokenId();
     const lastTokenId = Number(firstTokenId) + 99;
 
-    // MEMO: mint token
+    // MEMO: mint tokens
     const mintTx = await contract
       .connect(owner)
       .bulkMint(100, firstTokenId, "test TokenURI", {gasPrice: ethers.utils.parseUnits('100', 'gwei'), gasLimit: 30000000 } );
     await mintTx.wait();
 
-    // MEMO: token info
+    // MEMO: tokens info
     expect(await contract.tokenURI(firstTokenId)).to.equal("test TokenURI");
     expect(await contract.tokenURI(lastTokenId)).to.equal("test TokenURI");
     expect(await contract.totalSupply()).to.equal(100);
@@ -83,7 +83,7 @@ describe("token testing", function () {
   it("failed bulk mint: out of amount or 0", async function () {
     const firstTokenId = await contract.getCurrentTokenId();
 
-    // MEMO: mint token
+    // MEMO: mint tokens
     try { 
       await contract
       .connect(owner)
@@ -97,7 +97,7 @@ describe("token testing", function () {
     expect(await contract.isExistToken(firstTokenId)).to.equal(false);
     expect(await contract.balanceOf(owner.address)).to.equal(0);
 
-    // MEMO: mint token
+    // MEMO: mint tokens
     try { 
       await contract
       .connect(owner)
@@ -116,7 +116,7 @@ describe("token testing", function () {
     const buklkfirstTokenId = await contract.getCurrentTokenId();
     const singleMintedTokenId = Number(buklkfirstTokenId) + 10;
 
-    // MEMO: mint token
+    // MEMO: mint tokens
     const bulkTx = contract
       .connect(owner)
       .bulkMint(10, buklkfirstTokenId, "test TokenURI", {gasPrice: ethers.utils.parseUnits('100', 'gwei'), gasLimit: 30000000 } );
@@ -126,7 +126,7 @@ describe("token testing", function () {
       .connect(user1)
       .mint(singleMintedTokenId, "test TokenURI", {gasPrice: ethers.utils.parseUnits('100', 'gwei'), gasLimit: 30000000 } );
 
-    // MEMO: token info
+    // MEMO: tokens info
     expect(await contract.totalSupply()).to.equal(11);
     expect(await contract.balanceOf(owner.address)).to.equal(10);
     expect(await contract.balanceOf(user1.address)).to.equal(1);
@@ -230,6 +230,7 @@ describe("token testing", function () {
     expect(await contract.getCommunityOwner(TokenId2)).to.equal(owner.address);
     expect(await contract.getCommunityOwner(TokenId3)).to.equal(owner.address);
 
+    // MEMO: change owner of tokens 
     const changeOwnerTx = await contract
       .connect(owner)
       .setCommunityOwner([TokenId1,TokenId2,TokenId3], user1.address);
@@ -245,17 +246,18 @@ describe("token testing", function () {
     const TokenId2 = Number(TokenId1) + 1;
     const TokenId3 = Number(TokenId1) + 2;
 
-    // MEMO: mint token
+    // MEMO: mint tokens
     const mintTx = await contract
       .connect(owner)
       .bulkMint(3, TokenId1, "test TokenURI");
     await mintTx.wait();
 
-    // MEMO: token info
+    // MEMO: community owner of tokens is the address minted them
     expect(await contract.getCommunityOwner(TokenId1)).to.equal(owner.address);
     expect(await contract.getCommunityOwner(TokenId2)).to.equal(owner.address);
     expect(await contract.getCommunityOwner(TokenId3)).to.equal(owner.address);
 
+    // MEMO: change community owner of tokens 
     try {
       await contract
       .connect(user1)
@@ -263,7 +265,7 @@ describe("token testing", function () {
     } catch {
       return;
     }
-    // Cannot changed community owner by address isn't owner's 
+    // MEMO: Cannot changed community owner by address isn't owner's 
     expect(await contract.getCommunityOwner(TokenId1)).to.equal(owner.address);
     expect(await contract.getCommunityOwner(TokenId2)).to.equal(owner.address);
     expect(await contract.getCommunityOwner(TokenId3)).to.equal(owner.address);
