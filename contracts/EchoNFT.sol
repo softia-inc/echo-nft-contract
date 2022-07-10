@@ -27,10 +27,14 @@ contract echoNFT is ERC721URIStorage, ERC721Enumerable {
         communityOwner[tokenId] = msg.sender;
     }
 
-    function bulkMint( uint256 numberOfToken, uint256 tokenId, string memory _tokenURI) public payable {
+    function bulkMint(
+        uint256 numberOfToken,
+        uint256 tokenId,
+        string memory _tokenURI
+    ) public payable {
         require(tokenId == _tokenIdCounter.current());
         require(numberOfToken <= 100);
-        for (uint i = 0 ; i < numberOfToken ; i++ ) {
+        for (uint256 i = 0; i < numberOfToken; i++) {
             uint256 id = tokenId + i;
             mint(id, _tokenURI);
         }
@@ -55,6 +59,7 @@ contract echoNFT is ERC721URIStorage, ERC721Enumerable {
         require(msg.sender == ownerOf(tokenId));
         _burn(tokenId);
         minted[tokenId] = false;
+        communityOwner[tokenId] = address(0);
     }
 
     function _burn(uint256 tokenId)
@@ -94,15 +99,17 @@ contract echoNFT is ERC721URIStorage, ERC721Enumerable {
         return minted[tokenId];
     }
 
-    function setCommunityOwner(uint256[] memory tokenIds, address newAddress) public {
-        for (uint i = 0 ; i < tokenIds.length ; i++ ) {
+    function setCommunityOwner(uint256[] memory tokenIds, address newAddress)
+        public
+    {
+        for (uint256 i = 0; i < tokenIds.length; i++) {
             require(communityOwner[tokenIds[i]] == msg.sender);
             require(minted[tokenIds[i]]);
             communityOwner[tokenIds[i]] = newAddress;
         }
     }
 
-    function getCommunityOwner(uint256 tokenId) public view returns (address){
+    function getCommunityOwner(uint256 tokenId) public view returns (address) {
         return communityOwner[tokenId];
     }
 }
